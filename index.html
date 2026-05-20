@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qwen 3.7 Preview – A new open-weight model release from Alibaba's Qwen team</title>
+  <meta name="description" content="Qwen 3.7 Preview lands on Arena. Alibaba's latest open-weight model brings fast iteration, strong vision performance, and competitive benchmarks. Read community impressions and technical discussion.">
+  <meta name="keywords" content="Qwen 3.7, Qwen 3.7 Preview, Alibaba Qwen, open-weight model, open source LLM, AI model release, large language model, Qwen-Max, Qwen-Plus, model benchmark, local AI, self-hosted LLM, model comparison, open source AI, local LLM">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237c3aed'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='system-ui, sans-serif' font-size='20' font-weight='700' fill='%23fff'%3EQ%3C/text%3E%3C/svg%3E">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://qwen37.preview">
+  <meta property="og:title" content="Qwen 3.7 Preview – New open-weight model from Alibaba's Qwen team">
+  <meta property="og:description" content="Qwen 3.7 Preview lands on Arena with strong vision performance and competitive benchmarks. Read community impressions and technical discussion.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Qwen 3.7 Preview – New open-weight model from Alibaba's Qwen team">
+  <meta name="twitter:description" content="Qwen 3.7 Preview lands on Arena. Alibaba's latest open-weight model brings fast iteration and strong vision performance.">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface-raised: #1a1a28;
+      --border: #2a2a3e;
+      --text-primary: #e8e8f0;
+      --text-secondary: #9494b0;
+      --text-muted: #6a6a88;
+      --accent: #a78bfa;
+      --accent-hover: #c4b5fd;
+      --accent-dim: #7c3aed;
+      --green: #34d399;
+      --blue: #60a5fa;
+      --orange: #fb923c;
+      --radius: 8px;
+      --radius-lg: 12px;
+      --font-mono: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    nav {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 18px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #fff !important;
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent-hover) !important;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 100px 0 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-family: var(--font-mono);
+    }
+
+    .hero-label .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 7vw, 68px);
+      font-weight: 750;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface-raised);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-dim);
+      background: var(--surface);
+      transform: translateY(-1px);
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-item .value {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .stat-item .label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Sections */
+    section {
+      padding: 80px 0;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    /* Features grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent-dim);
+      transform: translateY(-2px);
+    }
+
+    .feature-card .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface-raised);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* How it works */
+    .steps {
+      display: grid;
+      gap: 24px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 20px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      font-family: var(--font-mono);
+    }
+
+    .step-content h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .step-content p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Community voices */
+    .voices-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .voice-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+
+    .voice-card .quote {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    .voice-card .quote::before {
+      content: '\201C';
+    }
+
+    .voice-card .quote::after {
+      content: '\201D';
+    }
+
+    .voice-card .source {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+
+    .faq-item summary {
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      font-size: 20px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      transition: transform 0.2s;
+    }
+
+    .faq-item[open] summary::after {
+      content: '\2212';
+    }
+
+    .faq-item .answer {
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* CTA section */
+    .cta-section {
+      text-align: center;
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-section h2 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto 32px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--text-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero {
+        padding: 60px 0 48px;
+      }
+      section {
+        padding: 48px 0;
+      }
+      .stats-bar {
+        gap: 24px;
+      }
+      .nav-links a:not(.nav-cta) {
+        display: none;
+      }
+      .step {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="/" class="logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="url(#logo-gradient)"/>
+          <text x="16" y="23" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#fff">Q</text>
+          <defs>
+            <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32">
+              <stop offset="0%" stop-color="#7c3aed"/>
+              <stop offset="100%" stop-color="#3b82f6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        Qwen 3.7 Preview
+      </a>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#how-it-works">Discussion</a>
+        <a href="#faq">FAQ</a>
+        <a href="#" class="nav-cta" onclick="window.open('https://mirofish.my/','_blank')">Try the model</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-label">
+        <span class="dot"></span>
+        New release &middot; Open weights
+      </div>
+      <h1>Qwen <span>3.7 Preview</span></h1>
+      <p>
+        Alibaba's Qwen team ships another open-weight model. The community weighs in on
+        fast iteration cadence, vision performance, and what it means for self-hosted AI.
+      </p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary" onclick="window.open('https://mirofish.my/','_blank')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          Explore Qwen 3.7
+        </a>
+        <a href="https://github.com/search?q=qwen+3.7&type=repositories" class="btn btn-secondary" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="value" style="color: var(--accent);">#6</div>
+        <div class="label">Text on Arena</div>
+      </div>
+      <div class="stat-item">
+        <div class="value" style="color: var(--accent);">#5</div>
+        <div class="label">Vision on Arena</div>
+      </div>
+      <div class="stat-item">
+        <div class="value" style="color: var(--green);">Open</div>
+        <div class="label">Model weights</div>
+      </div>
+      <div class="stat-item">
+        <div class="value" style="color: var(--blue);">Preview</div>
+        <div class="label">Release stage</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overview -->
+  <section id="overview">
+    <div class="container">
+      <div class="section-label">Overview</div>
+      <h2 class="section-title">What makes Qwen 3.7 different</h2>
+      <p class="section-subtitle">The community has been discussing what this release means for open-weight AI. Here are the key takeaways.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="icon" style="color: var(--accent);">&#9889;</div>
+          <h3>Fast iteration cadence</h3>
+          <p>Alibaba's Qwen team releases models at a remarkable pace. From 3.5 to 3.6 to 3.7 Preview, each iteration brings measurable improvements in both text and vision benchmarks.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="color: var(--blue);">&#128065;</div>
+          <h3>Strong vision performance</h3>
+          <p>Community testing shows Qwen models consistently outperform comparably-sized alternatives on vision tasks. Detailed scene description and accurate element recognition set them apart.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="color: var(--green);">&#128274;</div>
+          <h3>Open-weight commitment</h3>
+          <p>Qwen continues releasing open-weight models. The community values this commitment, even as the larger "Max" and "Plus" variants remain proprietary behind API endpoints.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="color: var(--orange);">&#128200;</div>
+          <h3>Real-world benchmarks</h3>
+          <p>Standard benchmarks are increasingly gamed by model providers. Community members emphasize personal task-based evaluation over leaderboard scores for real capability assessment.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="color: var(--accent);">&#128187;</div>
+          <h3>Local inference ready</h3>
+          <p>With efficient quantization via GGUF and tools like llama.cpp, Qwen 3.7 class models run well on consumer hardware. Single 3090 setups and even CPU-only configurations are viable.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="color: var(--blue);">&#128640;</div>
+          <h3>Pushing the frontier</h3>
+          <p>Open-weight models are closing the gap with proprietary offerings. Qwen's rapid release schedule puts pressure on larger labs and accelerates the entire ecosystem.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Discussion / How it works -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="section-label">Community Discussion</div>
+      <h2 class="section-title">What people are saying about Qwen 3.7</h2>
+      <p class="section-subtitle">The Hacker News thread captures the nuanced conversation around this release. Here are the recurring themes.</p>
+      <div class="voices-grid">
+        <div class="voice-card">
+          <div class="quote">Qwen 3.6 27B is the first one that can do things and doesn't constantly lose its mind and that can be run on a 3090 with a good context size.</div>
+          <div class="source">HN discussion</div>
+        </div>
+        <div class="voice-card">
+          <div class="quote">Qwen 3.6 35B is so good that it became standard open weights for everyday use. It's not far at all from proprietary models if you give it tools, skills and agents.</div>
+          <div class="source">HN discussion</div>
+        </div>
+        <div class="voice-card">
+          <div class="quote">The jump from 3.5 to 3.6 was noticeable and set the bar. If they can keep the momentum, Qwen and China won the AI wars.</div>
+          <div class="source">HN discussion</div>
+        </div>
+        <div class="voice-card">
+          <div class="quote">For coding it's really bad. Writing is ok, chat is good. It'll get better but it's not that close yet.</div>
+          <div class="source">HN discussion (contrasting view)</div>
+        </div>
+        <div class="voice-card">
+          <div class="quote">Let's hope Alibaba continues to open source its models. Worried the Chinese team will change their mind once they have parity.</div>
+          <div class="source">HN discussion</div>
+        </div>
+        <div class="voice-card">
+          <div class="quote">I love that open weight models are catching up so quickly. I stopped caring about benchmarks at MiniMax M2.5. I want cheaper models that don't slow down.</div>
+          <div class="source">HN discussion</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How the release cycle works -->
+  <section style="border-top: 1px solid var(--border);">
+    <div class="container">
+      <div class="section-label">Release Pattern</div>
+      <h2 class="section-title">How Qwen releases work</h2>
+      <p class="section-subtitle">Understanding the cadence helps set expectations for what 3.7 Preview means.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <h3>Preview announcement</h3>
+            <p>A tweet from the Qwen team on X (formerly Twitter) signals the new release. "Max" and "Plus" variants land on the Arena leaderboard first as proprietary API endpoints.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <h3>Community discussion</h3>
+            <p>The HN thread and social media light up with first impressions. Users share benchmark results, run personal evals, and debate whether the improvements are finetunes or foundational.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <h3>Open-weight release</h3>
+            <p>The smaller open-weight variants (27B, 35B, A3B) appear on HuggingFace. The community creates GGUF quants, and tools like llama.cpp and Ollama add support within days.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">04</div>
+          <div class="step-content">
+            <h3>Ecosystem adoption</h3>
+            <p>Unsloth publishes optimized quants. Local inference runners update. The model becomes the new default open-weight option for self-hosted AI workloads.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Common questions about Qwen 3.7</h2>
+      <p class="section-subtitle">The fastest answers to the questions people ask first.</p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Is Qwen 3.7 open weight?</summary>
+          <div class="answer">
+            The "Max" and "Plus" preview variants are proprietary API endpoints. Based on previous release patterns, smaller open-weight variants (27B, 35B, A3B) are expected to follow on HuggingFace under the Qwen license.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>What hardware do I need to run it locally?</summary>
+          <div class="answer">
+            The 27B dense variant runs on a single RTX 3090 with good context size. The 35B A3B MoE variant is even more memory-efficient. GGUF quantizations enable CPU-only inference on systems with sufficient RAM.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Are these models finetunes or trained from scratch?</summary>
+          <div class="answer">
+            The community consensus is that Qwen 3.7 class models are finetunes on the 3.5 architecture. Architecturally they share the same foundation, which explains the fast release cadence compared to fully new training runs.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>How good is Qwen 3.7 at vision tasks?</summary>
+          <div class="answer">
+            Early community reports indicate Qwen models outperform comparably-sized alternatives on detailed vision tasks like scene description, OCR, and inventory recognition. The Vision ranking at #5 on Arena reflects this strength.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>How does it compare to proprietary models?</summary>
+          <div class="answer">
+            Opinions vary. Some users find Qwen 3.6 class models competitive with proprietary offerings for everyday tasks when given proper tools and agents. Others note a significant gap remains for complex codebase work compared to frontier models like Opus or GPT-5.5.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Where can I download and try it?</summary>
+          <div class="answer">
+            The preview models are available through Alibaba's API. Open-weight variants will appear on HuggingFace. Tools like Ollama, LM Studio, and llama.cpp are the typical paths for local inference.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to explore Qwen 3.7?</h2>
+      <p>Try the preview models and see what the community is talking about.</p>
+      <a href="#" class="btn btn-primary" onclick="window.open('https://mirofish.my/','_blank')">
+        Get started
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>
+        Qwen 3.7 Preview &middot; Community discussion and technical overview &middot;
+        <a href="https://news.ycombinator.com/item?id=48181877" target="_blank" rel="noopener">Original HN thread</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
