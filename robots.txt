@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://qwen37.homes/sitemap.xml
